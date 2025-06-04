@@ -42,7 +42,7 @@
   
   <div class="content container mt-5 pt-5">
     <div class="professeur-section">
-      <h2 class="section-title text-center mb-4">Choix de filière et modules</h2>
+      <h2 class="section-title text-center mb-4">?odules Qffectes</h2>
       <p class="text-muted mb-4 text-center">Veuillez sélectionner la filière, le niveau et les modules que vous souhaitez enseigner</p>
 
       <form method="POST" action="traitement_choix_prof.php" id="formChoixFiliereProf">
@@ -70,8 +70,11 @@
                 <h4 class="mb-0"><i class="fas fa-layer-group me-2"></i> Niveau</h4>
               </div>
               <div class="card-body">
-                <select class="form-select form-select-lg" id="selectNiveau" name="niveau" required disabled>
-                  <option value="" selected disabled>Sélectionnez d'abord une filière</option>
+                <select class="form-select form-select-lg" id="selectNiveau" name="niveau" required>
+                  <option value="" selected disabled>Sélectionnez un niveau</option>
+                  <option value="1A">1A</option>
+                  <option value="2A">2A</option>
+                  <option value="3A">3A</option>
                 </select>
               </div>
             </div>
@@ -124,141 +127,57 @@
 
   
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-    
-    const modulesDataProf = {
-      GSI: {
-        "1A": ["Algorithmique", "Programmation Orientée Objet", "Bases de données", "Mathématiques pour l'ingénieur"],
-        "2A": ["Conception des SI", "Développement Web Avancé", "Systèmes d'Information", "Gestion de projet"],
-        "3A": ["Architecture des SI", "Cloud Computing", "Big Data", "Projet de fin d'études"]
-      },
-      IDS: {
-        "1A": ["Bases de données", "Statistiques", "Algèbre linéaire", "Programmation Python"],
-        "2A": ["Data Mining", "Machine Learning", "Visualisation de données", "Bases NoSQL"],
-        "3A": ["Big Data", "Deep Learning", "Data Engineering", "Projet de fin d'études"]
-      },
-      IIA: {
-        "1A": ["Mathématiques discrètes", "Algorithmique", "Probabilités", "Logique"],
-        "2A": ["Machine Learning", "Traitement d'images", "NLP", "Réseaux de neurones"],
-        "3A": ["Deep Learning", "IA avancée", "Robotique", "Projet de fin d'études"]
-      },
-      RIT: {
-        "1A": ["Réseaux bas niveau", "Systèmes d'exploitation", "Architecture des ordinateurs", "Programmation système"],
-        "2A": ["Réseaux avancés", "Sécurité informatique", "Virtualisation", "Cloud Computing"],
-        "3A": ["Réseaux SDN", "Cybersécurité", "IoT", "Projet de fin d'études"]
-      }
-    };
+  <script type="module">
+    import ModulePlanning from './js/ModulePlanning.js';
 
-    
+    // Données statiques pour les modules
+    const modulesDataStatic = [
+        new ModulePlanning("1A", "Algorithmique", "GSI"),
+        new ModulePlanning("1A", "Bases de données", "IDS"),
+        new ModulePlanning("2A", "Machine Learning", "IIA"),
+        new ModulePlanning("3A", "Cloud Computing", "GSI"),
+        new ModulePlanning("3A", "Cybersécurité", "RIT"),
+        new ModulePlanning("2A", "Réseaux avancés", "RIT"),
+    ];
+
+    // Fonction pour afficher les modules filtrés
+    function renderModules(filiere, niveau) {
+        const modulesSection = document.getElementById('modulesSection');
+        const modulesContainer = document.getElementById('modulesContainer');
+
+        // Filtrer les modules en fonction de la filière et du niveau
+        const filteredModules = modulesDataStatic.filter(module => {
+            return (!filiere || module.filliere === filiere) &&
+                   (!niveau || module.niveau === niveau);
+        });
+
+        // Afficher les modules filtrés
+        modulesSection.style.display = filteredModules.length > 0 ? 'block' : 'none';
+        modulesContainer.innerHTML = filteredModules.map(module => `
+            <div class="col-md-6 mb-3">
+                <div class="module-card p-3 rounded">
+                    <h5 class="mb-1">${module.module}</h5>
+                    <small class="text-muted">${module.filliere} - ${module.niveau}</small>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // Gestion des événements pour les sélections
     document.getElementById('selectFiliere').addEventListener('change', function() {
-      const filiere = this.value;
-      const niveauSelect = document.getElementById('selectNiveau');
-      
-      
-      niveauSelect.disabled = false;
-      niveauSelect.innerHTML = `
-        <option value="" selected disabled>Sélectionnez un niveau</option>
-        <option value="1A">1ère Année</option>
-        <option value="2A">2ème Année</option>
-        <option value="3A">3ème Année</option>
-      `;
-      
-      
-      document.getElementById('modulesSection').style.display = 'none';
-      document.getElementById('btnSubmit').disabled = true;
+        const filiere = this.value;
+        const niveau = document.getElementById('selectNiveau').value;
+        renderModules(filiere, niveau); // Appliquer le filtre
     });
 
-    
     document.getElementById('selectNiveau').addEventListener('change', function() {
-      const filiere = document.getElementById('selectFiliere').value;
-      const niveau = this.value;
-      
-      if (filiere && niveau) {
-        showModules(filiere, niveau);
-      }
+        const filiere = document.getElementById('selectFiliere').value;
+        const niveau = this.value;
+        renderModules(filiere, niveau); // Appliquer le filtre
     });
 
-    
-    function showModules(filiere, niveau) {
-      const modulesSection = document.getElementById('modulesSection');
-      const modulesContainer = document.getElementById('modulesContainer');
-      
-      modulesSection.style.display = 'block';
-      modulesContainer.innerHTML = '';
-      
-      const modules = modulesDataProf[filiere][niveau];
-      
-      modules.forEach((module, index) => {
-        const col = document.createElement('div');
-        col.className = 'col-md-6 mb-3';
-        
-        const moduleCard = document.createElement('div');
-        moduleCard.className = 'module-card p-3 rounded';
-        
-        moduleCard.innerHTML = `
-          <div class="form-check">
-            <input class="form-check-input module-checkbox" type="checkbox" id="module-${index}" name="modules[]" value="${module}">
-            <label class="form-check-label" for="module-${index}">
-              <h5 class="mb-1">${module}</h5>
-              <small class="text-muted">${filiere} - ${niveau}</small>
-            </label>
-          </div>
-        `;
-        
-        col.appendChild(moduleCard);
-        modulesContainer.appendChild(col);
-      });
-      
-      
-      document.getElementById('toggleAllModules').addEventListener('change', function() {
-        const checkboxes = document.querySelectorAll('.module-checkbox');
-        checkboxes.forEach(checkbox => {
-          checkbox.checked = this.checked;
-        });
-        checkFormCompletion();
-      });
-      
-      
-      const moduleCheckboxes = document.querySelectorAll('.module-checkbox');
-      moduleCheckboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', checkFormCompletion);
-      });
-    }
-
-    
-    function checkFormCompletion() {
-      const modulesChecked = document.querySelectorAll('.module-checkbox:checked').length > 0;
-      document.getElementById('btnSubmit').disabled = !modulesChecked;
-    }
-
-    
-    document.getElementById('formChoixFiliereProf').addEventListener('submit', function(e) {
-      e.preventDefault();
-      
-      
-      setTimeout(() => {
-        document.getElementById('confirmationMessage').style.display = 'block';
-        window.scrollTo({
-          top: document.body.scrollHeight,
-          behavior: 'smooth'
-        });
-      }, 1000);
-    });
-
-   
-    document.getElementById('btnAnnuler').addEventListener('click', function() {
-      document.getElementById('selectFiliere').selectedIndex = 0;
-      document.getElementById('selectNiveau').selectedIndex = 0;
-      document.getElementById('selectNiveau').disabled = true;
-      document.getElementById('modulesSection').style.display = 'none';
-      document.getElementById('confirmationMessage').style.display = 'none';
-      document.getElementById('btnSubmit').disabled = true;
-      
-      
-      document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-        checkbox.checked = false;
-      });
-    });
+    // Initialisation sans filtre
+    renderModules(null, null);
   </script>
 </body>
 </html>
