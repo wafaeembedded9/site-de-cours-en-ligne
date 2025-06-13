@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Choix de Filière - OSSL Learning</title>
+  <title>Choix de Filière - Étudiant</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -11,7 +11,6 @@
 </head>
 <body>
 
-  
   <nav class="navbar navbar-expand-lg navbar-dark shadow-sm fixed-top">
     <div class="container-fluid">
       <a class="navbar-brand fw-bold" href="accueil.html">
@@ -39,121 +38,66 @@
     </div>
   </nav>
 
-  
   <div class="content container mt-5 pt-5">
     <div class="etudiant-section">
       <h2 class="section-title text-center mb-4">Choix de filière et niveau</h2>
       <p class="text-muted mb-4 text-center">Veuillez sélectionner votre filière et votre niveau d'étude</p>
 
-      <form method="POST" action="traitement_choix.php" id="formChoixFiliere">
-        
-        <div class="card mb-4 selection-card">
-          <div class="card-header bg-primary text-white">
-            <h4 class="mb-0"><i class="fas fa-graduation-cap me-2"></i> Filière</h4>
+      <form method="POST" action="traitement_choix_etudiant.php" id="formChoixFiliereEtudiant">
+        <div class="row mb-4">
+          <div class="col-md-6 mb-3">
+            <div class="card h-100 selection-card">
+              <div class="card-header bg-primary text-white">
+                <h4 class="mb-0"><i class="fas fa-graduation-cap me-2"></i> Filière</h4>
+              </div>
+              <div class="card-body">
+                <select class="form-select form-select-lg" id="selectFiliere" name="filiere" required>
+                  <option value="" selected disabled>Sélectionnez une filière</option>
+                  <option value="GSI">Génie des Systèmes Informatiques (GSI)</option>
+                  <option value="IDS">Ingénierie des Données et Systèmes (IDS)</option>
+                  <option value="IIA">Intelligence Artificielle (IIA)</option>
+                  <option value="RIT">Réseaux et Infrastructures Technologiques (RIT)</option>
+                </select>
+              </div>
+            </div>
           </div>
-          <div class="card-body">
-            <div class="row">
-              <div class="col-md-6 mb-3">
-                <div class="form-check p-3 rounded filiere-option" onclick="selectFiliere(this)">
-                  <input class="form-check-input" type="radio" name="filiere" id="filiere1" value="GSI" required>
-                  <label class="form-check-label fs-5" for="filiere1">
-                    <i class="fas fa-laptop-code me-2"></i> Génie des Systèmes Informatiques (GSI)
-                  </label>
-                  <p class="text-muted mt-2 mb-0">Conception et développement de systèmes informatiques complexes</p>
-                </div>
+          <div class="col-md-6 mb-3">
+            <div class="card h-100 selection-card">
+              <div class="card-header bg-primary text-white">
+                <h4 class="mb-0"><i class="fas fa-layer-group me-2"></i> Niveau</h4>
               </div>
-              <div class="col-md-6 mb-3">
-                <div class="form-check p-3 rounded filiere-option" onclick="selectFiliere(this)">
-                  <input class="form-check-input" type="radio" name="filiere" id="filiere2" value="IDS">
-                  <label class="form-check-label fs-5" for="filiere2">
-                    <i class="fas fa-database me-2"></i> Ingénierie des Données et Systèmes (IDS)
-                  </label>
-                  <p class="text-muted mt-2 mb-0">Gestion et analyse des données massives et systèmes d'information</p>
-                </div>
-              </div>
-              <div class="col-md-6 mb-3">
-                <div class="form-check p-3 rounded filiere-option" onclick="selectFiliere(this)">
-                  <input class="form-check-input" type="radio" name="filiere" id="filiere3" value="IIA">
-                  <label class="form-check-label fs-5" for="filiere3">
-                    <i class="fas fa-robot me-2"></i> Intelligence Artificielle (IIA)
-                  </label>
-                  <p class="text-muted mt-2 mb-0">Algorithmes intelligents, machine learning et deep learning</p>
-                </div>
-              </div>
-              <div class="col-md-6 mb-3">
-                <div class="form-check p-3 rounded filiere-option" onclick="selectFiliere(this)">
-                  <input class="form-check-input" type="radio" name="filiere" id="filiere4" value="RIT">
-                  <label class="form-check-label fs-5" for="filiere4">
-                    <i class="fas fa-network-wired me-2"></i> Réseaux et Infrastructures Technologiques (RIT)
-                  </label>
-                  <p class="text-muted mt-2 mb-0">Infrastructures réseaux, sécurité et cloud computing</p>
-                </div>
+              <div class="card-body">
+                <select class="form-select form-select-lg" id="selectNiveau" name="niveau" required>
+                  <option value="" selected disabled>Sélectionnez un niveau</option>
+                  <option value="1A">1A</option>
+                  <option value="2A">2A</option>
+                  <option value="3A">3A</option>
+                </select>
               </div>
             </div>
           </div>
         </div>
 
-        
-        <div class="card mb-4 selection-card">
-          <div class="card-header bg-primary text-white">
-            <h4 class="mb-0"><i class="fas fa-layer-group me-2"></i> Niveau d'étude</h4>
-          </div>
-          <div class="card-body">
-            <div class="row">
-              <div class="col-md-4 mb-3">
-                <div class="form-check p-3 rounded niveau-option" onclick="selectNiveau(this)">
-                  <input class="form-check-input" type="radio" name="niveau" id="niveau1" value="1A" required>
-                  <label class="form-check-label fs-5" for="niveau1">
-                    <i class="fas fa-star me-2"></i> 1ère Année
-                  </label>
-                  <p class="text-muted mt-2 mb-0">Tronc commun et bases fondamentales</p>
-                </div>
-              </div>
-              <div class="col-md-4 mb-3">
-                <div class="form-check p-3 rounded niveau-option" onclick="selectNiveau(this)">
-                  <input class="form-check-input" type="radio" name="niveau" id="niveau2" value="2A">
-                  <label class="form-check-label fs-5" for="niveau2">
-                    <i class="fas fa-star-half-alt me-2"></i> 2ème Année
-                  </label>
-                  <p class="text-muted mt-2 mb-0">Approfondissement des spécialités</p>
-                </div>
-              </div>
-              <div class="col-md-4 mb-3">
-                <div class="form-check p-3 rounded niveau-option" onclick="selectNiveau(this)">
-                  <input class="form-check-input" type="radio" name="niveau" id="niveau3" value="3A">
-                  <label class="form-check-label fs-5" for="niveau3">
-                    <i class="fas fa-certificate me-2"></i> 3ème Année
-                  </label>
-                  <p class="text-muted mt-2 mb-0">Spécialisation et projet de fin d'études</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        
         <div class="card mb-4 selection-card" id="modulesSection" style="display: none;">
           <div class="card-header bg-primary text-white">
             <h4 class="mb-0"><i class="fas fa-book me-2"></i> Modules disponibles</h4>
           </div>
           <div class="card-body">
             <div class="row" id="modulesContainer">
-              
+              <!-- Les modules filtrés seront affichés ici -->
             </div>
           </div>
         </div>
 
-        
         <div class="d-flex justify-content-center gap-4 mt-5">
           <button type="button" id="btnAnnuler" class="btn btn-annuler">
-            <i class="fas fa-times-circle me-2"></i> Annuler mon choix
+            <i class="fas fa-times-circle me-2"></i> Annuler
           </button>
-          <button type="submit" class="btn btn-envoyer">
+          <button type="submit" class="btn btn-envoyer" id="btnSubmit" disabled>
             <i class="fas fa-paper-plane me-2"></i> Envoyer mon choix
           </button>
         </div>
 
-        
         <div id="confirmationMessage" class="alert alert-success mt-4 text-center" style="display: none;">
           <i class="fas fa-check-circle me-2"></i> Votre choix a bien été enregistré !
         </div>
@@ -161,7 +105,6 @@
     </div>
   </div>
 
-  
   <footer class="mt-5">
     <p class="text-center">Contact : ossl-learning@ensao.ump.ma</p>
     <div class="footer-links text-center">
@@ -171,11 +114,9 @@
     <p class="mt-2 text-center">© 2025 - OSSL Learning</p>
   </footer>
 
-  
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    
-    const modulesData = {
+    const modulesDataStatic = {
       GSI: {
         "1A": ["Algorithmique", "Programmation Orientée Objet", "Bases de données", "Mathématiques pour l'ingénieur"],
         "2A": ["Conception des SI", "Développement Web Avancé", "Systèmes d'Information", "Gestion de projet"],
@@ -198,91 +139,43 @@
       }
     };
 
-    
-    function selectFiliere(element) {
-      const options = document.querySelectorAll('.filiere-option');
-      options.forEach(opt => {
-        opt.classList.remove('selected');
-      });
-      element.classList.add('selected');
-      checkAndShowModules();
-    }
+    function renderModules(filiere, niveau) {
+      const modulesSection = document.getElementById('modulesSection');
+      const modulesContainer = document.getElementById('modulesContainer');
 
-    
-    function selectNiveau(element) {
-      const options = document.querySelectorAll('.niveau-option');
-      options.forEach(opt => {
-        opt.classList.remove('selected');
-      });
-      element.classList.add('selected');
-      checkAndShowModules();
-    }
-
-    
-    function checkAndShowModules() {
-      const filiere = document.querySelector('input[name="filiere"]:checked');
-      const niveau = document.querySelector('input[name="niveau"]:checked');
-      
       if (filiere && niveau) {
-        const modulesSection = document.getElementById('modulesSection');
-        const modulesContainer = document.getElementById('modulesContainer');
-        
+        const modules = modulesDataStatic[filiere][niveau];
         modulesSection.style.display = 'block';
-        modulesContainer.innerHTML = '';
-        
-        const modules = modulesData[filiere.value][niveau.value];
-        
-        modules.forEach((module, index) => {
-          const col = document.createElement('div');
-          col.className = 'col-md-6 mb-3';
-          
-          const moduleCard = document.createElement('div');
-          moduleCard.className = 'module-card p-3 rounded';
-          
-          moduleCard.innerHTML = `
-            <div class="d-flex align-items-center">
-              <i class="fas fa-bookmark me-3 text-primary"></i>
-              <div>
-                <h5 class="mb-1">${module}</h5>
-                <small class="text-muted">${filiere.value} - ${niveau.value}</small>
-              </div>
+        modulesContainer.innerHTML = modules.map(module => `
+          <div class="col-md-6 mb-3">
+            <div class="module-card p-3 rounded">
+              <h5 class="mb-1">${module}</h5>
+              <small class="text-muted">${filiere} - ${niveau}</small>
             </div>
-          `;
-          
-          col.appendChild(moduleCard);
-          modulesContainer.appendChild(col);
-        });
+          </div>
+        `).join('');
+      } else {
+        modulesSection.style.display = 'none';
+        modulesContainer.innerHTML = '';
       }
     }
 
-    
-    document.getElementById('formChoixFiliere').addEventListener('submit', function(e) {
-      e.preventDefault();
-      
-      
-      setTimeout(() => {
-        document.getElementById('confirmationMessage').style.display = 'block';
-        window.scrollTo({
-          top: document.body.scrollHeight,
-          behavior: 'smooth'
-        });
-      }, 1000);
+    document.getElementById('selectFiliere').addEventListener('change', function() {
+      const filiere = this.value;
+      const niveau = document.getElementById('selectNiveau').value;
+      renderModules(filiere, niveau);
     });
 
-    
+    document.getElementById('selectNiveau').addEventListener('change', function() {
+      const filiere = document.getElementById('selectFiliere').value;
+      const niveau = this.value;
+      renderModules(filiere, niveau);
+    });
+
     document.getElementById('btnAnnuler').addEventListener('click', function() {
-      const inputs = document.querySelectorAll('input[type="radio"]');
-      inputs.forEach(input => {
-        input.checked = false;
-      });
-      
-      const options = document.querySelectorAll('.filiere-option, .niveau-option');
-      options.forEach(opt => {
-        opt.classList.remove('selected');
-      });
-      
-      document.getElementById('modulesSection').style.display = 'none';
-      document.getElementById('confirmationMessage').style.display = 'none';
+      document.getElementById('selectFiliere').value = '';
+      document.getElementById('selectNiveau').value = '';
+      renderModules(null, null);
     });
   </script>
 </body>
